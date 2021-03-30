@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "sourceMap": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "strictPropertyInitialization": false,
+    "module": "commonjs",
+    "target": "es2019",
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "removeComments": false,
+    "declaration": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "lib": ["es2019", "dom"]
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "src/templates/*.ts"
+  ]
+}
