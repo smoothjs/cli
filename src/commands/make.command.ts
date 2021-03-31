@@ -121,4 +121,35 @@ export class MakeCommand {
       .cd(subdir)
       .render('service.empty.ts', `${names.kebabName}.service.ts`, names)
   }
+
+  @Command({
+    name: 'make:filter <name>',
+    description: 'Create a HTTP exception filter.',
+    arguments: {
+      name: 'Filter class name.',
+    },
+  })
+  async filter(
+    @Arguments()
+    args: string[]
+  ) {
+    const [name] = args
+
+    const fs = new FileSystem()
+
+    let root = ''
+    if (fs.exists('app/filters')) {
+      root = 'app/filters'
+    } else if (fs.exists('filters')) {
+      root = 'filters'
+    }
+
+    const names = getNames(basename(name))
+    const subdir = dirname(name)
+
+    fs.cd(root)
+      .ensureDir(subdir)
+      .cd(subdir)
+      .render('filter.empty.ts', `${names.kebabName}.exception.filter.ts`, names)
+  }
 }
