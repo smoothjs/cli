@@ -1,4 +1,4 @@
 export interface CommandParamMetadataItem<O> {
-    index: number;
-    option: O;
+  index: number
+  option: O
 }

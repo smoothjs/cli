@@ -18,7 +18,5 @@
     "lib": ["es2019", "dom"]
   },
   "include": ["src/**/*.ts"],
-  "exclude": [
-    "src/templates/*.ts"
-  ]
+  "exclude": ["src/templates/*.ts"]
 }

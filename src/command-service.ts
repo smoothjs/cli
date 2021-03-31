@@ -4,128 +4,121 @@ import { CommandParamTypes } from './enums'
 import { CommandOption, CommandOptionsOption } from './interfaces'
 
 export class CommandService {
-    private commander: any
+  private commander: any
 
-    constructor(
-        private commands: object[]
-    ) {
-      this.commander = new Command()
-    }
+  constructor(private commands: object[]) {
+    this.commander = new Command()
+  }
 
-    public create() {
-        this.commander.version('0.0.1')
+  public async create() {
+    this.commander.version('0.0.1')
 
-        this.commands.forEach((command: object) => {
-            this.registerCommand(command)
-        })
-        
-        this.commander.parse()
-    }
+    this.commands.forEach((command: object) => {
+      this.registerCommand(command)
+    })
 
-    private registerCommand(command: object) {
-        const methods: string[] = getMethods(command)
+    await this.commander.parseAsync()
 
-        methods.forEach((method: string) => {
-            const commandOptions: CommandOption = this.getCommandHandlerMetadataValue(command, method)
+    return this.commander
+  }
 
-            if (! commandOptions) {
-              return;
-            }
+  private registerCommand(command: object) {
+    const methods: string[] = getMethods(command)
 
-            const commandInstance = this.commander
-              .command(commandOptions.name)
-              .description(commandOptions.description, commandOptions.arguments || {})
+    methods.forEach((method: string) => {
+      const commandOptions: CommandOption = this.getCommandHandlerMetadataValue(command, method)
 
-            this.generateCommandBuilder(
-              this.getCommandArgsMetadataValue(command, method),
-              commandInstance
-            )
+      if (!commandOptions) {
+        return
+      }
 
-            commandInstance.action(() => {
-              const params = this.generateCommandHandlerParams(
-                this.getCommandArgsMetadataValue(command, method),
-                this.commander.opts()
-              )
+      const commandInstance = this.commander
+        .command(commandOptions.name)
+        .description(commandOptions.description, commandOptions.arguments || {})
 
-              if (! isFunction(command[method])) {
-                // TODO DISPLAY ERROR
-                return;
-              }
+      this.generateCommandBuilder(
+        this.getCommandArgsMetadataValue(command, method),
+        commandInstance
+      )
 
-              command[method](...params)
-            })
-        })
-    }
+      commandInstance.action(() => {
+        const params = this.generateCommandHandlerParams(
+          this.getCommandArgsMetadataValue(command, method),
+          this.commander.opts()
+        )
 
-    protected iteratorParamMetadata(
-        params: any,
-        callback: (item: any, key: string) => void
-      ) {
-        if (!params) {
-          return;
+        if (!isFunction(command[method])) {
+          // TODO DISPLAY ERROR
+          return
         }
-    
-        Object.keys(params).forEach(key => {
-          const param: any[] = params[key];
-          if (!param || !Array.isArray(param)) {
-            return;
-          }
-    
-          param.forEach(metadata => callback(metadata, key));
-        });
-    }
-    
-    private generateCommandBuilder(
-        params: CommandOptionsOption[],
-        commandInstance: Command
-    ) {
-        const list: any = [];
-    
-        this.iteratorParamMetadata(params, (item, key) => {
-          switch (key) {
-            case CommandParamTypes.OPTION:
-              commandInstance[(item.option as CommandOptionsOption).required ? 'requiredOption' : 'option'](
-                    (item.option as CommandOptionsOption).flag,
-                    (item.option as CommandOptionsOption).description,
-                    (item.option as CommandOptionsOption).defaultValue
-                )
-              break;
-            default:
-              break;
-          }
-        });
-    
-        return list;
+
+        command[method](...params)
+      })
+    })
+  }
+
+  private iteratorParamMetadata(params: any, callback: (item: any, key: string) => void) {
+    if (!params) {
+      return
     }
 
-    private generateCommandHandlerParams(
-        params: CommandOptionsOption[],
-        argv: any
-      ) {
-        const list: any = [];
-    
-        this.iteratorParamMetadata(params, (item, key) => {
-          switch (key) {
-            case CommandParamTypes.OPTION:
-              list[item.index] = argv[(item.option as CommandOptionsOption).name];
-              break;
+    Object.keys(params).forEach((key) => {
+      const param: any[] = params[key]
+      if (!param || !Array.isArray(param)) {
+        return
+      }
 
-            case CommandParamTypes.ARGV:
-              list[item.index] = this.commander.args.splice(1);
-              break;
-            default:
-              break;
-          }
-        });
-    
-        return list;
-    }
+      param.forEach((metadata) => callback(metadata, key))
+    })
+  }
 
-    private getCommandHandlerMetadataValue(command: object, method: string) {
-        return getMetadata('COMMAND_HANDLER_METADATA', command, method) || false
-    }
+  private generateCommandBuilder(params: CommandOptionsOption[], commandInstance: Command) {
+    const list: any = []
 
-    private getCommandArgsMetadataValue(command: object, method: string) {
-        return getMetadata('COMMAND_ARGS_METADATA', command.constructor, method) || []
-    }
+    this.iteratorParamMetadata(params, (item, key) => {
+      switch (key) {
+        case CommandParamTypes.OPTION:
+          commandInstance[
+            (item.option as CommandOptionsOption).required ? 'requiredOption' : 'option'
+          ](
+            (item.option as CommandOptionsOption).flag,
+            (item.option as CommandOptionsOption).description,
+            (item.option as CommandOptionsOption).defaultValue
+          )
+          break
+        default:
+          break
+      }
+    })
+
+    return list
+  }
+
+  private generateCommandHandlerParams(params: CommandOptionsOption[], argv: any) {
+    const list: any = []
+
+    this.iteratorParamMetadata(params, (item, key) => {
+      switch (key) {
+        case CommandParamTypes.OPTION:
+          list[item.index] = argv[(item.option as CommandOptionsOption).name]
+          break
+
+        case CommandParamTypes.ARGV:
+          list[item.index] = this.commander.args.splice(1)
+          break
+        default:
+          break
+      }
+    })
+
+    return list
+  }
+
+  private getCommandHandlerMetadataValue(command: object, method: string) {
+    return getMetadata('COMMAND_HANDLER_METADATA', command, method) || false
+  }
+
+  private getCommandArgsMetadataValue(command: object, method: string) {
+    return getMetadata('COMMAND_ARGS_METADATA', command.constructor, method) || []
+  }
 }

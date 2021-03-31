@@ -1,1 +1,1 @@
-export { CommandParamTypes } from "./command-param-types";
+export { CommandParamTypes } from './command-param-types'

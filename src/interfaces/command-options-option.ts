@@ -1,7 +1,7 @@
 export interface CommandOptionsOption {
-    name: string;
-    flag: string;
-    required: boolean;
-    description: string;
-    defaultValue?: any;
+  name: string
+  flag: string
+  required: boolean
+  description: string
+  defaultValue?: any
 }

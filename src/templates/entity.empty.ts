@@ -1,6 +1,6 @@
-import { BaseEntity, Entity } from 'typeorm';
+import { BaseEntity, Entity } from 'typeorm'
 
-@Entity()
-export class /* upperFirstCamelName */ extends BaseEntity {
-    //
+@Entity() /* upperFirstCamelName */
+export class extends BaseEntity {
+  //
 }

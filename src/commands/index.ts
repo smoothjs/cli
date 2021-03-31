@@ -1,2 +1,2 @@
-export { ApplicationCommand } from "./application.command";
-export { MakeCommand } from "./make.command";
+export { ApplicationCommand } from './application.command'
+export { MakeCommand } from './make.command'

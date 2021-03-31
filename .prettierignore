@@ -1,7 +1,8 @@
-lib
+build
 README.md
 *.md
 .eslintrc.json
 package.json
 *.html
 *.txt
+src/templates

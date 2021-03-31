@@ -1,4 +1,4 @@
 export enum CommandParamTypes {
   OPTION = 'OPTION',
-  ARGV = 'ARGV'
+  ARGV = 'ARGV',
 }
