@@ -11,7 +11,7 @@ export class CommandService {
   }
 
   public async create() {
-    this.commander.version('0.0.1')
+    this.commander.version('0.1.0')
 
     this.commands.forEach((command: object) => {
       this.registerCommand(command)
