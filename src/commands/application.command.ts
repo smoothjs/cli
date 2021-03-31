@@ -26,7 +26,7 @@ export class ApplicationCommand {
       name: 'blueprint',
       flag: '-r, --blueprint <blueprint>',
       description: 'A specific github url.',
-      defaultValue: undefined,
+      defaultValue: 'smooth-app',
       required: false,
     })
     blueprint: string | undefined,

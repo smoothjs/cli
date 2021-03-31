@@ -1,7 +1,7 @@
-import { Hook, HookDecorator } from '@smoothjs/smooth';
+import { Hook } from '@smoothjs/smooth';
 
-export function /* upperFirstCamelName */(): HookDecorator {
-  return Hook(async ({ req, res, next }) => {
+export function /* upperFirstCamelName */(): ClassDecorator & MethodDecorator {
+  return Hook(async (request: any, response: any, next: Function) => {
 
   });
 }

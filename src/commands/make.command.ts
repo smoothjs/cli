@@ -152,4 +152,66 @@ export class MakeCommand {
       .cd(subdir)
       .render('filter.empty.ts', `${names.kebabName}.exception.filter.ts`, names)
   }
+
+  @Command({
+    name: 'make:event <name>',
+    description: 'Create a HTTP event.',
+    arguments: {
+      name: 'Event class name.',
+    },
+  })
+  async event(
+    @Arguments()
+    args: string[]
+  ) {
+    const [name] = args
+
+    const fs = new FileSystem()
+
+    let root = ''
+    if (fs.exists('app/events')) {
+      root = 'app/events'
+    } else if (fs.exists('events')) {
+      root = 'events'
+    }
+
+    const names = getNames(basename(name))
+    const subdir = dirname(name)
+
+    fs.cd(root)
+      .ensureDir(subdir)
+      .cd(subdir)
+      .render('event.empty.ts', `${names.kebabName}.event.ts`, names)
+  }
+
+  @Command({
+    name: 'make:listener <name>',
+    description: 'Create a event listener.',
+    arguments: {
+      name: 'Listener class name.',
+    },
+  })
+  async listener(
+    @Arguments()
+    args: string[]
+  ) {
+    const [name] = args
+
+    const fs = new FileSystem()
+
+    let root = ''
+    if (fs.exists('app/listeners')) {
+      root = 'app/listeners'
+    } else if (fs.exists('listeners')) {
+      root = 'listeners'
+    }
+
+    const names = getNames(basename(name))
+    const subdir = dirname(name)
+
+    fs.cd(root)
+      .ensureDir(subdir)
+      .cd(subdir)
+      .render('listener.empty.ts', `${names.kebabName}.listener.ts`, names)
+  }
 }
