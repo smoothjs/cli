@@ -17,7 +17,7 @@ export class ApplicationCommand {
       name: 'branch',
       flag: '-b, --branch <branch>',
       description: 'Clone a specific branch.',
-      defaultValue: undefined,
+      defaultValue: 'master',
       required: false,
     })
     branch: string | undefined,
@@ -26,7 +26,7 @@ export class ApplicationCommand {
       name: 'blueprint',
       flag: '-r, --blueprint <blueprint>',
       description: 'A specific github url.',
-      defaultValue: 'smooth-app',
+      defaultValue: 'smoothjs/smooth-app',
       required: false,
     })
     blueprint: string | undefined,
@@ -54,8 +54,6 @@ export class ApplicationCommand {
       return
     }
 
-    fs.ensureDir(names.kebabName).cd(names.kebabName)
-
     log('📂 Creating files...')
 
     let cloneCommand = 'git clone --depth=1'
@@ -76,6 +74,8 @@ export class ApplicationCommand {
       log(`${red('Error:')} Unable to clone ${blueprint}.`)
       return
     }
+
+    fs.cd(names.kebabName)
 
     if (autoInstall) {
       const packageManager = isYarnInstalled() ? 'yarn' : 'npm'
@@ -117,6 +117,6 @@ export class ApplicationCommand {
     if (!autoInstall) {
       logCommand('npm install')
     }
-    logCommand('npm run develop')
+    logCommand('npm run build')
   }
 }
