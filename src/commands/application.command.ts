@@ -45,9 +45,6 @@ export class ApplicationCommand {
   ) {
     const [name] = args
 
-    console.log(name, blueprint)
-    return
-
     const names = getNames(name)
     const isGitUrl = require('is-git-url')
     const fs = new FileSystem()
