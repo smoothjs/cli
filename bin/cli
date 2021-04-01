@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
-const { CommandService, ApplicationCommand } = require('../build')
 
 function checkModuleExists(name) {
     try { return require.resolve(name); }
@@ -22,9 +21,14 @@ async function bootstrap() {
         }
         require(cli);
     } else {
-        await new CommandService([
-            new ApplicationCommand
-        ]).create()
+        if (checkModuleExists('@smoothjs/cli')) {
+            const { CommandService, ApplicationCommand } = require('@smoothjs/cli')
+            await new CommandService([
+                new ApplicationCommand
+            ]).create()
+        } else {
+            console.error(`Cannot find '@smoothjs/cli' package.`)
+        }
     }
 }
 

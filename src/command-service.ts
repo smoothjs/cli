@@ -1,4 +1,4 @@
-import { getMetadata, getMethods, isFunction } from '@smoothjs/smooth'
+import { getMetadata, getMethods, isFunction, isObject } from '@smoothjs/smooth'
 import { Command } from 'commander'
 import { CommandParamTypes } from './enums'
 import { CommandOption, CommandOptionsOption } from './interfaces'
@@ -41,10 +41,10 @@ export class CommandService {
         commandInstance
       )
 
-      commandInstance.action(() => {
+      commandInstance.action((...options) => {
         const params = this.generateCommandHandlerParams(
           this.getCommandArgsMetadataValue(command, method),
-          this.commander.opts()
+          this.getOptionsFromArgv(options)
         )
 
         if (!isFunction(command[method])) {
@@ -94,7 +94,7 @@ export class CommandService {
     return list
   }
 
-  private generateCommandHandlerParams(params: CommandOptionsOption[], argv: any) {
+  private generateCommandHandlerParams(params: CommandOptionsOption[], argv: object) {
     const list: any = []
 
     this.iteratorParamMetadata(params, (item, key) => {
@@ -108,6 +108,20 @@ export class CommandService {
           break
         default:
           break
+      }
+    })
+
+    return list
+  }
+
+  private getOptionsFromArgv(
+    argv: any[]
+  ): object {
+    let list: object = {}
+    
+    argv.forEach((arg) => {
+      if (isObject(arg) && !(arg instanceof Command)) {
+        list = arg
       }
     })
 
