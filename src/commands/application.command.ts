@@ -78,7 +78,9 @@ export class ApplicationCommand {
 
     fs.cd(names.kebabName)
 
-    rmdirSync(path.resolve(process.cwd(), `${names.kebabName}/.git`))
+    rmdirSync(path.resolve(process.cwd(), `${names.kebabName}/.git`), {
+      recursive: true
+    })
 
     if (autoInstall) {
       const packageManager = isYarnInstalled() ? 'yarn' : 'npm'
