@@ -2,8 +2,9 @@ import { spawn, SpawnOptions } from 'child_process'
 import { red } from 'colors/safe'
 import { Command, Option, Arguments } from '../decorators'
 import { FileSystem } from '../file-system'
+import { rmdirSync } from 'fs'
 import { getNames, log, logCommand, isYarnInstalled, execute } from '../utils'
-
+import * as path from 'path'
 export class ApplicationCommand {
   @Command({
     name: 'new <name>',
@@ -76,6 +77,8 @@ export class ApplicationCommand {
     }
 
     fs.cd(names.kebabName)
+
+    rmdirSync(path.resolve(process.cwd(), `${names.kebabName}/.git`))
 
     if (autoInstall) {
       const packageManager = isYarnInstalled() ? 'yarn' : 'npm'

@@ -3,14 +3,11 @@ import {
   copyFileSync,
   existsSync,
   mkdirSync,
-  readdirSync,
   readFileSync,
-  unlinkSync,
   writeFileSync,
 } from 'fs'
 import { dirname, join, parse } from 'path'
 import { cyan, green } from 'colors/safe'
-import { rmDirAndFiles } from './utils'
 
 export class ClientError extends Error {
   readonly name = 'ClientError'
