@@ -60,7 +60,7 @@
     "ajv": "~8.5.0",
     "cli-spinner": "^0.2.10",
     "colors": "^1.4.0",
-    "commander": "~7.2.0",
+    "commander": "~8.2.0",
     "is-git-url": "^1.0.0",
     "lodash.compact": "^3.0.1",
     "lodash.flattendeep": "^4.4.0"
