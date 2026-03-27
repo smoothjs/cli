@@ -40,7 +40,7 @@ jobs:
           MYSQL_DATABASE: test
 
       postgres:
-        image: postgres:9.6.1
+        image: postgres:9.6.24
         ports:
           - 5432:5432
         env:
